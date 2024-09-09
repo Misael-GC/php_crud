@@ -59,8 +59,8 @@ include("db.php");
                 </tread>
                 <tbody>
                     <?php 
-                        // $query = "SELECT * FROM cat_personas";
-                        $query = "SELECT * FROM general";
+                        //$query = "SELECT * FROM cat_personas"; //cambio
+                       $query = "SELECT * FROM general";
                         $result_logs = mysqli_query($conn, $query);
 
                         while($row = mysqli_fetch_array($result_logs)){
