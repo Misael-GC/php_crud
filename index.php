@@ -59,17 +59,17 @@ include("db.php");
                 </tread>
                 <tbody>
                     <?php 
-                        //$query = "SELECT * FROM cat_personas"; //cambio
-                       $query = "SELECT * FROM general";
+                       $query = "SELECT * FROM cat_personas"; //cambio
+                       //$query = "SELECT * FROM general";
                         $result_logs = mysqli_query($conn, $query);
 
                         while($row = mysqli_fetch_array($result_logs)){
                     ?>
                         <tr>
-                            <td><?php echo $row['nombre_persona']; ?></td>
-                            <td><?php echo $row['apellido_persona']; ?></td>
-                            <td><?php echo $row['edad_persona']; ?></td>
-                            <td><?php echo $row['estado_persona']; ?></td>
+                            <td><?php echo $row['nombre']; ?></td>
+                            <td><?php echo $row['apellido']; ?></td>
+                            <td><?php echo $row['edad']; ?></td>
+                            <td><?php echo $row['estado']; ?></td>
 
                             <td>
                                 <a href="edit.php?id=<?php echo $row['id']?>" class="btn btn-secondary p-1">
