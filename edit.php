@@ -11,15 +11,20 @@ $fecha_registro = '';
 
 if  (isset($_GET['id'])) {
   $id = $_GET['id'];
-  $query = "SELECT * FROM general WHERE id=$id";
+  //$query = "SELECT * FROM general WHERE id=$id";
+  $query = "SELECT cp.id, cp.nombre, cp.apellido, cp.edad, cp.estado, cpt.nombre, hpp.fecha_registro 
+            FROM cat_personas cp
+            INNER JOIN his_personas_proyecto hpp ON cp.id = id_cat_personas
+            INNER JOIN cat_proyecto cpt ON hpp.id_cat_proyecto = cpt.id WHERE cp.id=$id";
+
   $result = mysqli_query($conn, $query);
   if (mysqli_num_rows($result) == 1) {
     $row = mysqli_fetch_array($result);
-    $nombre_persona = $row['nombre_persona'];
-    $apellido_persona = $row['apellido_persona'];
-    $edad_persona = $row['edad_persona'];
-    $estado_persona = $row['estado_persona'];
-    $nombre_proyecto = $row['nombre_proyecto'];
+    $nombre_persona = $row['nombre'];
+    $apellido_persona = $row['apellido'];
+    $edad_persona = $row['edad'];
+    $estado_persona = $row['estado'];
+    $nombre_proyecto = $row['nombre'];
     $fecha_registro = $row['fecha_registro'];
   }
 }
@@ -33,17 +38,45 @@ if (isset($_POST['update'])) {
   $nombre_proyecto = $_POST['nombre_proyecto'];
   $fecha_registro = $_POST['fecha_registro'];
 
-  $query = "UPDATE general 
-            SET nombre_persona = '$nombre_persona', 
-                apellido_persona = '$apellido_persona', 
-                edad_persona = '$edad_persona', 
-                estado_persona = '$estado_persona', 
-                nombre_proyecto = '$nombre_proyecto', 
-                fecha_registro = '$fecha_registro' 
-            WHERE id = $id";
+  // $query2 = "UPDATE general 
+  //           SET nombre_persona = '$nombre_persona', 
+  //               apellido_persona = '$apellido_persona', 
+  //               edad_persona = '$edad_persona', 
+  //               estado_persona = '$estado_persona', 
+  //               nombre_proyecto = '$nombre_proyecto', 
+  //               fecha_registro = '$fecha_registro' 
+  //           WHERE id = $id";
   
-  mysqli_query($conn, $query);
+  // mysqli_query($conn, $query2);
   
+   // Actualiza la tabla cat_personas
+  $query1 = "UPDATE cat_personas 
+  SET nombre = '$nombre_persona', 
+      apellido = '$apellido_persona', 
+      edad = '$edad_persona', 
+      estado = '$estado_persona' 
+  WHERE id = $id";
+
+  mysqli_query($conn, $query1);
+
+  // Actualiza la tabla his_personas_proyecto (si quieres actualizar la fecha)
+  $query2 = "UPDATE his_personas_proyecto 
+    SET fecha_registro = '$fecha_registro'
+    WHERE id_cat_personas = $id";
+
+  mysqli_query($conn, $query2);
+
+  // Actualiza la tabla cat_proyecto (solo si cambias el proyecto, necesitarías el ID del proyecto)
+  // Aquí asumo que el nombre del proyecto es único. Si no lo es, deberías manejar la actualización
+  // por id_cat_proyecto en lugar de solo el nombre.
+  $query3 = "UPDATE cat_proyecto 
+    SET nombre = '$nombre_proyecto'
+    WHERE id = (
+        SELECT id_cat_proyecto FROM his_personas_proyecto WHERE id_cat_personas = $id
+    )";
+
+  mysqli_query($conn, $query3);
+
   $_SESSION['message'] = 'Datos actualizados correctamente';
   $_SESSION['message_type'] = 'info';
   
