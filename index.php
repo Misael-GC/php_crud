@@ -48,29 +48,36 @@ include("db.php");
             <table class="table table-bordered">
                 <tread>
                     <tr>
+                        <th>Id</th>
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Edad</th>
                         <th>Activo</th>
-                        <!-- <th>Proyecto</th> -->
-                        <!-- <th>Fecha de Registro</th> -->
+                        <th>Proyecto</th>
+                        <th>Fecha de Registro</th>
                         <th>Actions</th>
                     </tr>
                 </tread>
                 <tbody>
                     <?php 
-                       $query = "SELECT * FROM cat_personas"; //cambio
+                       //$query = "SELECT * FROM cat_personas"; //cambio
+                       $query = "SELECT cp.id, cp.nombre as nombre_p, cp.apellido, cp.edad, cp.estado, cpt.nombre, hpp.fecha_registro 
+                       FROM cat_personas cp
+                       INNER JOIN his_personas_proyecto hpp ON cp.id = id_cat_personas
+                       INNER JOIN cat_proyecto cpt ON hpp.id_cat_proyecto = cpt.id;"; //cambio
                        //$query = "SELECT * FROM general";
                         $result_logs = mysqli_query($conn, $query);
 
                         while($row = mysqli_fetch_array($result_logs)){
                     ?>
                         <tr>
-                            <td><?php echo $row['nombre']; ?></td>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['nombre_p']; ?></td>
                             <td><?php echo $row['apellido']; ?></td>
                             <td><?php echo $row['edad']; ?></td>
                             <td><?php echo $row['estado']; ?></td>
-
+                            <td><?php echo $row['nombre']; ?></td>
+                            <td><?php echo $row['fecha_registro']; ?></td>
                             <td>
                                 <a href="edit.php?id=<?php echo $row['id']?>" class="btn btn-secondary p-1">
                                 <i class="fa-solid fa-pen-to-square"></i>
