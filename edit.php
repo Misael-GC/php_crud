@@ -12,7 +12,7 @@ $fecha_registro = '';
 if  (isset($_GET['id'])) {
   $id = $_GET['id'];
   //$query = "SELECT * FROM general WHERE id=$id";
-  $query = "SELECT cp.id, cp.nombre, cp.apellido, cp.edad, cp.estado, cpt.nombre, hpp.fecha_registro 
+  $query = "SELECT cp.id, cp.nombre as nombre_p, cp.apellido, cp.edad, cp.estado, cpt.nombre, hpp.fecha_registro 
             FROM cat_personas cp
             INNER JOIN his_personas_proyecto hpp ON cp.id = id_cat_personas
             INNER JOIN cat_proyecto cpt ON hpp.id_cat_proyecto = cpt.id WHERE cp.id=$id";
@@ -20,7 +20,7 @@ if  (isset($_GET['id'])) {
   $result = mysqli_query($conn, $query);
   if (mysqli_num_rows($result) == 1) {
     $row = mysqli_fetch_array($result);
-    $nombre_persona = $row['nombre'];
+    $nombre_persona = $row['nombre_p'];
     $apellido_persona = $row['apellido'];
     $edad_persona = $row['edad'];
     $estado_persona = $row['estado'];
